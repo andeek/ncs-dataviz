@@ -1,0 +1,65 @@
+body {
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-size: 12px;
+}
+
+#container {
+    width: 100%;
+}
+
+#page-container {
+    padding: 0 15px;
+}
+
+#top-navbar {
+	margin-bottom: 0;
+    border-color: #fff;
+}
+
+/*.navbar-brand {
+    position: absolute;
+    width: 100%;
+    left: 0; 
+    text-align: center; 
+    margin: auto;
+}*/
+
+.space-below-controls {
+    /*border: 1px solid #f00;*/
+    height: 10px;
+}
+
+.scrollable-menu {
+    height: auto;
+    max-height: 300px;
+    overflow-x: hidden;
+}
+
+.d3-tip {
+    line-height: 1;
+    font-size: 11px;
+    padding: 12px;
+    background: rgba(0, 0, 0, 0.8);
+    color: #fff;
+    border-radius: 8px;
+}
+
+/* Creates a small triangle extender for the tooltip */
+.d3-tip:after {
+    box-sizing: border-box;
+    display: inline;
+    font-size: 10px;
+    width: 100%;
+    line-height: 1;
+    color: rgba(0, 0, 0, 0.8);
+    content: "\25BC";
+    position: absolute;
+    text-align: center;
+}
+
+/* Style northward tooltips differently */
+.d3-tip.n:after {
+    margin: -1px 0 0 0;
+    top: 100%;
+    left: 0;
+}

@@ -1,0 +1,71 @@
+.bar-plots {
+    /*border: 1px solid #00f;*/
+    width: 100%;
+}
+
+
+.bar {
+    fill: steelblue;
+    cursor: pointer;
+}
+
+.bar.active {
+    fill: red;
+}
+
+.bar.mouseover {
+    fill: purple;
+}
+
+.m1se {
+    stroke: greenyellow;
+}
+
+.m2se {
+    stroke: darkorange;
+}
+
+/* .axis is also used by scatter plot */
+.axis text {
+    fill: #666;
+    font-size: 11px;
+}
+
+.axis path,
+.axis line {
+	fill: none;
+	stroke: #666;
+	shape-rendering: crispEdges;
+}
+
+.axis line.grid-line {
+    stroke: #fff;
+}
+
+.label {
+    fill: #333;
+    font-weight: 400;
+    font-size: 11px;
+    cursor: pointer;
+}
+
+.label.active {
+    fill: red;
+    font-weight: 700;
+    font-size: 12px;
+}
+
+.label.mouseover {
+    fill: purple;
+    /*font-weight: 900;*/
+    font-weight: 700;
+    font-size: 12px;
+}
+
+.sort-controls {
+    position: relative;
+}
+
+.sort-btn-group {
+    position: absolute;
+}

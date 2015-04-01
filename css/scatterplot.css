@@ -1,0 +1,34 @@
+.scatter-plot {
+    /*border: 1px solid #00f;*/
+    width: 100%;
+}
+
+.point {
+    /*fill: steelblue;*/
+    stroke: #999;
+    stroke-width: 1.5px;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    cursor: pointer;
+}
+
+.point.active {
+    /*fill: red;*/
+    stroke: red;
+    stroke-width: 2px;
+}
+
+.point.mouseover {
+    /*fill: purple;*/
+    stroke: purple;
+    stroke-width: 3px;
+}
+
+#correlation {
+    fill: #c6c6c6;
+    font-size: 72px;
+}
+
+.axis-label.active {
+    font-weight: 900;
+}
