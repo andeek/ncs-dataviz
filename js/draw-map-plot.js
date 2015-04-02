@@ -47,7 +47,7 @@ function drawMapPlot(selector, datasets) {
     });
 
     d3.csv('data/sites.csv', function(csv) {
-        sites.selectAll('county')
+        sites.selectAll('site')
             .data(csv)
           .enter().append('circle')
             .attr('class', 'site')
@@ -143,7 +143,8 @@ function drawMapPlot(selector, datasets) {
                 b = d3.select('#site-' + d.id);
             if (a.classed('active')) { b.classed('active', true); }
             if (a.classed('mouseover')) { b.classed('mouseover', true); }
-            b.transition().style('fill', getColor(d));
+            b.transition().duration(window.duration)
+                .style('fill', getColor(d));
         });
 
         // legend data join
@@ -182,7 +183,7 @@ function drawMapPlot(selector, datasets) {
             top: margin,
             right: width - margin
         };
-        title.transition()
+        title.transition().duration(window.duration)
             .text(data[0].variable)
             .attr('transform',
                   'translate(' + position.right + ',' + position.top + ')');
@@ -192,7 +193,7 @@ function drawMapPlot(selector, datasets) {
             top: 40,
             right: width - margin
         };
-        legend.transition()
+        legend.transition().duration(window.duration)
             .attr('transform',
                   'translate(' + position.right + ',' + position.top + ')');
         var itemHeight = (height - position.top - margin) / items.size();
@@ -201,13 +202,13 @@ function drawMapPlot(selector, datasets) {
             return 'translate(0,' + (itemHeight * d.index) + ')';
         });
 
-        items.selectAll('.legend-symbol').transition()
+        items.selectAll('.legend-symbol').transition().duration(window.duration)
             .attr('x', -18)
             .attr('width', 18)
             .attr('height', itemHeight * .95)
             .style('fill', function(d) { return colors[d.index]; });
 
-        items.selectAll('.legend-text').transition()
+        items.selectAll('.legend-text').transition().duration(window.duration)
             .attr('x', -24)
             .attr('y', itemHeight * .45)
             .text(function(d) { return labels[d.index]; });

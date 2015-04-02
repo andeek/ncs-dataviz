@@ -1,3 +1,5 @@
+window.duration = 1000
+
 function getVariable(index) {
     return d3.select('#variable-' + index).property('value');
 }

@@ -142,7 +142,7 @@ function drawLabels(canvas, bbox, data, ordered) {
 
         var y = makeYScale(ordered, height);
 
-        labels.transition()
+        labels.transition().duration(window.duration)
             .attr('transform', function(d) {
                 var j = y(d.id) + y.rangeBand() / 2;
                 return 'translate(' + width + ',' + j + ')';
@@ -230,7 +230,7 @@ function drawBarPlot(canvas, bbox, index, data, ordered) {
             .attr('y2', -height);
 
         bars.data(data)
-            .transition()
+            .transition().duration(window.duration)
             .attr('x', function(d) { return x.range()[0]; })
             .attr('width', function(d) { return x(d.estimate); })
             .attr('y', function(d) { return y(d.id); })
@@ -238,7 +238,7 @@ function drawBarPlot(canvas, bbox, index, data, ordered) {
 
         if ('stderror' in data[0]) {
             m1se.data(data)
-                .transition()
+                .transition().duration(window.duration)
                 .attr('x1', function(d) { return x(d.estimate - d.stderror); })
                 .attr('x2', function(d) { return x(d.estimate - d.stderror); })
                 .attr('y1', function(d) { return y(d.id); })
@@ -248,7 +248,7 @@ function drawBarPlot(canvas, bbox, index, data, ordered) {
                            'none' : 'inherit';
                 });
             m2se.data(data)
-                .transition()
+                .transition().duration(window.duration)
                 .attr('x1', function(d) { return x(d.estimate - d.stderror * 2); })
                 .attr('x2', function(d) { return x(d.estimate - d.stderror * 2); })
                 .attr('y1', function(d) { return y(d.id); })

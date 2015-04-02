@@ -164,16 +164,16 @@ function _drawScatterPlot(canvas, bbox, data1, data2) {
             };
         });
         points.data(data)
-            .transition()
+            .transition().duration(window.duration)
             .attr('cx', function(d) { return x(d.x); })
-            .attr('cy', function(d) { return y(d.y); });
+            .attr('cy', function(d) { return y(d.y); })
+            .style('fill', function(d) { return colorFromMap(d.d); });
 
-        focus.forEach(function(d) {
+        data.forEach(function(d) {
             var a = d3.select('#label-' + d.id),
                 b = d3.select('#point-' + d.id);
             if (a.classed('active')) { b.classed('active', true); }
             if (a.classed('mouseover')) { b.classed('mouseover', true); }
-            b.style('fill', colorFromMap(d));
         });
 
         xAxisLabel.classed('active', false);
