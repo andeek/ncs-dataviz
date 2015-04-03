@@ -218,18 +218,6 @@ function drawMapPlot(selector, datasets) {
         };
     }
 
-    function getFormatter(d) {
-        if (d.type === 'percentage') {
-            return d3.format('.0%');
-        } else if (d.type === 'year') {
-            return d3.format('.0f');
-        } else if (d.type === 'count') {
-            return d3.format('.0s');
-        } else {
-            return d3.format('g');
-        }
-    }
-
     return {
         change: change
     };
