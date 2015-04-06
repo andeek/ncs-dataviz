@@ -10,6 +10,7 @@
         populateDropdown('#variable-1 + ul', data1.keys());
         var data2 = reshape2(data2);
         populateDropdown('#variable-2 + ul', data2.keys());
+        var datasets = [data1, data2];
 
         // set default selection for dropdowns
         $('.dropdown-menu').each(function() {
@@ -19,10 +20,10 @@
         });
 
         // draw
-        var barPlots = drawBarPlots('#bar-plots', [data1, data2]);
-        var mapPlot = drawMapPlot('#map-plot', [data1, data2]);
-        var scatterPlot = drawScatterPlot('#scatter-plot', [data1, data2]);
-        scatterPlot.change(mapPlot.change().color);
+        var barPlots = drawBarPlots('#bar-plots', datasets);
+        var quantizer = makeQuantizer(datasets);
+        var mapPlot = drawMapPlot('#map-plot', datasets, quantizer);
+        var scatterPlot = drawScatterPlot('#scatter-plot', datasets, quantizer);
 
         // add event to dropdowns 'variable'
         $('.dropdown-menu').on('click', 'li a', function() {
@@ -30,17 +31,17 @@
             $(this).parents('.btn-group').find('.selection').text(s);
             $(this).parents('.btn-group').find('.btn').val(s);
             barPlots.change();
-            // mapPlot.change();
-            // scatterPlot.change();
-            scatterPlot.change(mapPlot.change().color);
+            quantizer = makeQuantizer(datasets);
+            mapPlot.change(quantizer);
+            scatterPlot.change(quantizer);
         });
 
         // add event to radio buttons 'map-index'
         $('#map-index-selector button').on('click', function() {
             $(this).addClass('active').siblings().removeClass('active');
-            // mapPlot.change();
-            // scatterPlot.change();
-            scatterPlot.change(mapPlot.change().color);
+            quantizer = makeQuantizer(datasets);
+            mapPlot.change(quantizer);
+            scatterPlot.change(quantizer);
         });
 
         // add event to button 'clear'
@@ -67,9 +68,9 @@
         // add resize event
         $(window).on('resize', function() {
             barPlots.change();
-            // mapPlot.change();
-            // scatterPlot.change();
-            scatterPlot.change(mapPlot.change().color);
+            quantizer = makeQuantizer(datasets);
+            mapPlot.change(quantizer);
+            scatterPlot.change(quantizer);
         });
     }
 

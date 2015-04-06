@@ -1,4 +1,4 @@
-function drawScatterPlot(selector, datasets) {
+function drawScatterPlot(selector, datasets, quantizer) {
     var canvas = d3.select(selector);
 
     // draw
@@ -6,7 +6,7 @@ function drawScatterPlot(selector, datasets) {
         _drawScatterPlot(canvas, null, getDataVector(1), getDataVector(2));
 
     // initialize
-    // change();
+    change(quantizer);
 
     function resizeCanvas(canvas) {
         var width = parseInt(canvas.style('width')),
@@ -46,11 +46,10 @@ function drawScatterPlot(selector, datasets) {
         d3.select('#correlation').html('&#x3c1; = ' + d3.format('.2f')(corr));
     }
 
-    function change(colorFromMap) {
+    function change(quantizer) {
         resizeCanvas(canvas);
         var bbox = computeBbox(canvas);
-        scatterplot.change(bbox, getDataVector(1), getDataVector(2),
-                           colorFromMap);
+        scatterplot.change(bbox, getDataVector(1), getDataVector(2), quantizer);
         updateCorrelation();
     }
 
@@ -122,7 +121,7 @@ function _drawScatterPlot(canvas, bbox, data1, data2) {
             .nice(8);
     }
 
-    function updateXY(bbox, data1, data2, colorFromMap) {
+    function updateXY(bbox, data1, data2, quantizer) {
         g.attr('transform', 'translate(' + bbox.left + ',' + bbox.top + ')');
 
         var width = bbox.right - bbox.left,
@@ -167,7 +166,7 @@ function _drawScatterPlot(canvas, bbox, data1, data2) {
             .transition().duration(window.duration)
             .attr('cx', function(d) { return x(d.x); })
             .attr('cy', function(d) { return y(d.y); })
-            .style('fill', function(d) { return colorFromMap(d.d); });
+            .style('fill', function(d) { return quantizer.color(d.d); });
 
         data.forEach(function(d) {
             var a = d3.select('#label-' + d.id),
