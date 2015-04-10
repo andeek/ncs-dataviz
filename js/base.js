@@ -24,8 +24,9 @@ function displaySort(value) {
 }
 
 function getMapIndex() {
-    return d3.select('#map-index-selector button.active')
-            .attr('id').split('-')[2];
+    var index = d3.select('#map-index-selector button.active')
+        .attr('id').split('-')[2];
+    return parseInt(index) - 1;
 }
 
 function computeCorrelation(x, y) {
@@ -88,55 +89,6 @@ function getMinValue(data) {
 
 function getMaxValue(data) {
     return d3.max(data, function(d) { return d.estimate; });
-}
-
-
-function makeQuantizer(datasets) {
-    var index = getMapIndex();
-    var data = datasets[index - 1].get(getVariable(index)).values();
-
-    // map values to n intervals.
-    // all intervals are left-closed, except that the last one is closed.
-    var interval = d3.scale.linear()
-        .domain([getMinValue(data), getMaxValue(data)])
-        .nice(8);
-    var n = interval.ticks().length - 1;
-    interval.range([0, n]);
-
-    // make interval labels
-    var ticks = interval.ticks().map(getFormatterForAxis(data[0]));
-    var labels = d3.range(n).map(function(i) {
-        return ticks[i] + '-' + ticks[i + 1];
-    });
-
-    // map data to (n + 1) indices.
-    // null values are assigned to the last index.
-    var index = function(d) {
-        if (d.estimate == null) {
-            return n;
-        } else {
-            var i = Math.floor(interval(d.estimate));
-            return i !== n ? i : (n - 1);
-        }
-    };
-
-    // map data to (n + 1) colors.
-    // the last color, which is for null values, is transparent.
-    var color = d3.scale.linear()
-        .domain(d3.extent(d3.range(n)))
-        .range(['rgb(247,251,255)', 'rgb(8,48,107)'])
-        .interpolate(d3.interpolateHsl);
-    var colors = d3.range(n).map(color);
-    colors.push('transparent');
-    color = function(d) { return colors[index(d)]; };
-
-    return {
-        index: index,
-        color: color,
-        size: function() { return n; },
-        getLabelByIndex: function(i) { return labels[i]; },
-        getColorByIndex: function(i) { return colors[i]; }
-    };
 }
 
 function tipHtml(d) {

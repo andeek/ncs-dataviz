@@ -19,9 +19,9 @@
 
         // draw
         var datas = [getData(datasets, 1), getData(datasets, 2)];
+        var quantizer = makeQuantizer(datas[getMapIndex()]);
         var barPlots = drawBarPlots('#bar-plots', datas);
-        var quantizer = makeQuantizer(datasets);
-        var mapPlot = drawMapPlot('#map-plot', datasets, quantizer);
+        var mapPlot = drawMapPlot('#map-plot', datas[getMapIndex()], quantizer);
         var scatterPlot = drawScatterPlot('#scatter-plot', datasets, quantizer);
 
         // add event to dropdowns 'variable'
@@ -31,16 +31,16 @@
             $(this).parents('.btn-group').find('.btn').val(s);
             datas = [getData(datasets, 1), getData(datasets, 2)];
             barPlots.change(datas);
-            quantizer = makeQuantizer(datasets);
-            mapPlot.change(quantizer);
+            quantizer = makeQuantizer(datas[getMapIndex()]);
+            mapPlot.change(datas[getMapIndex()], quantizer);
             scatterPlot.change(quantizer);
         });
 
         // add event to radio buttons 'map-index'
         $('#map-index-selector button').on('click', function() {
             $(this).addClass('active').siblings().removeClass('active');
-            quantizer = makeQuantizer(datasets);
-            mapPlot.change(quantizer);
+            quantizer = makeQuantizer(datas[getMapIndex()]);
+            mapPlot.change(datas[getMapIndex()], quantizer);
             scatterPlot.change(quantizer);
         });
 
@@ -68,8 +68,7 @@
         // add resize event
         $(window).on('resize', function() {
             barPlots.change(datas);
-            quantizer = makeQuantizer(datasets);
-            mapPlot.change(quantizer);
+            mapPlot.change(datas[getMapIndex()], quantizer);
             scatterPlot.change(quantizer);
         });
     }
@@ -123,5 +122,50 @@
 
     function getData(datasets, index) {
         return datasets[index - 1].get(getVariable(index)).values();
+    }
+
+    function makeQuantizer(data) {
+        // map values to n intervals.
+        // all intervals are left-closed, except that the last one is closed.
+        var interval = d3.scale.linear()
+            .domain([getMinValue(data), getMaxValue(data)])
+            .nice(8);
+        var n = interval.ticks().length - 1;
+        interval.range([0, n]);
+
+        // make interval labels
+        var ticks = interval.ticks().map(getFormatterForAxis(data[0]));
+        var labels = d3.range(n).map(function(i) {
+            return ticks[i] + '-' + ticks[i + 1];
+        });
+
+        // map data to (n + 1) indices.
+        // null values are assigned to the last index.
+        var index = function(d) {
+            if (d.estimate == null) {
+                return n;
+            } else {
+                var i = Math.floor(interval(d.estimate));
+                return i !== n ? i : (n - 1);
+            }
+        };
+
+        // map data to (n + 1) colors.
+        // the last color, which is for null values, is transparent.
+        var color = d3.scale.linear()
+            .domain(d3.extent(d3.range(n)))
+            .range(['rgb(247,251,255)', 'rgb(8,48,107)'])
+            .interpolate(d3.interpolateHsl);
+        var colors = d3.range(n).map(color);
+        colors.push('transparent');
+        color = function(d) { return colors[index(d)]; };
+
+        return {
+            index: index,
+            color: color,
+            size: function() { return n; },
+            getLabelByIndex: function(i) { return labels[i]; },
+            getColorByIndex: function(i) { return colors[i]; }
+        };
     }
 }());

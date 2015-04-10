@@ -151,7 +151,7 @@ function _drawScatterPlot(canvas, bbox, data1, data2) {
             .attr('transform', 'translate(-50,' + (height / 2) + ')rotate(-90)')
             .text('NCS: ' + data2[0].variable);
 
-        var index = parseInt(getMapIndex()) - 1,
+        var index = getMapIndex(),
             focus = [data1, data2][index];
 
         var data = d3.range(focus.length).map(function(i) {
