@@ -5,12 +5,10 @@
         .await(ready);
 
     function ready(error, data1, data2) {
-        // prepare data and dropdowns
-        var data1 = reshape1(data1);
-        populateDropdown('#variable-1 + ul', data1.keys());
-        var data2 = reshape2(data2);
-        populateDropdown('#variable-2 + ul', data2.keys());
-        var datasets = [data1, data2];
+        // prepare datasets and dropdowns
+        var datasets = [reshape1(data1), reshape2(data2)];
+        populateDropdown('#variable-1 + ul', datasets[0].keys());
+        populateDropdown('#variable-2 + ul', datasets[1].keys());
 
         // set default selection for dropdowns
         $('.dropdown-menu').each(function() {
@@ -20,7 +18,8 @@
         });
 
         // draw
-        var barPlots = drawBarPlots('#bar-plots', datasets);
+        var datas = [getData(datasets, 1), getData(datasets, 2)];
+        var barPlots = drawBarPlots('#bar-plots', datas);
         var quantizer = makeQuantizer(datasets);
         var mapPlot = drawMapPlot('#map-plot', datasets, quantizer);
         var scatterPlot = drawScatterPlot('#scatter-plot', datasets, quantizer);
@@ -30,7 +29,8 @@
             var s = $(this).text();
             $(this).parents('.btn-group').find('.selection').text(s);
             $(this).parents('.btn-group').find('.btn').val(s);
-            barPlots.change();
+            datas = [getData(datasets, 1), getData(datasets, 2)];
+            barPlots.change(datas);
             quantizer = makeQuantizer(datasets);
             mapPlot.change(quantizer);
             scatterPlot.change(quantizer);
@@ -62,12 +62,12 @@
             } else {
                 $(this).val(-value);
             }
-            barPlots.change();
+            barPlots.change(datas);
         });
 
         // add resize event
         $(window).on('resize', function() {
-            barPlots.change();
+            barPlots.change(datas);
             quantizer = makeQuantizer(datasets);
             mapPlot.change(quantizer);
             scatterPlot.change(quantizer);
@@ -120,4 +120,8 @@
             .attr('href', '#')
             .text(function(d) { return d; });
     }
-})();
+
+    function getData(datasets, index) {
+        return datasets[index - 1].get(getVariable(index)).values();
+    }
+}());
