@@ -36,7 +36,7 @@ var drawBarPlots = (function(selector, datas) {
             .attr('text-anchor', 'end')
             .on('mouseover', function(d) { mouseover(d.id); })
             .on('mouseout', function(d) { mouseout(d.id); })
-            .on('click', clicked);
+            .on('click', function(d) { toggleActive(d.id); });
 
         // make labels invisible before appearing at initialized positions
         labels.attr('transform', 'translate(-200,0)');
@@ -89,7 +89,7 @@ var drawBarPlots = (function(selector, datas) {
                 tip.hide();
                 mouseout(d.id);
             })
-            .on('click', clicked);
+            .on('click', function(d) { toggleActive(d.id); });
 
         var xAxisContainer = g.append('g')
             .attr('class', 'x axis');
@@ -167,8 +167,7 @@ var drawBarPlots = (function(selector, datas) {
                     });
             }
 
-            d3.select(button.node().parentNode)
-                .style('left', bbox.left + 'px');
+            d3.select(button.node().parentNode).style('left', bbox.left + 'px');
             button.html(displaySort(button.property('value')));
         }
 
@@ -237,14 +236,13 @@ var drawBarPlots = (function(selector, datas) {
     }
 
     function makeSortButton (index) {
-        var button = d3.select('.sort-controls')
+        return d3.select('.sort-controls')
             .append('div')
             .attr('class', 'btn-group btn-group-xs sort-btn-group')
             .append('button')
             .attr('class', 'btn btn-default sort')
             .attr('id', 'sort-' + index)
             .attr('type', 'button');
-        return button;
     }
 
     function makeXScale(domain, width) {
@@ -258,10 +256,6 @@ var drawBarPlots = (function(selector, datas) {
         return d3.scale.ordinal()
             .domain(ids)
             .rangeRoundBands([0, height], .1);
-    }
-
-    function clicked(d) {
-        toggleActive(d.id);
     }
 
     function getId(d) {
