@@ -48,9 +48,9 @@ var drawMapPlot = (function(selector, data, quantizer) {
                 .attr('d', path);
         });
 
-        d3.csv('data/sites.csv', function(d) {
-                return { id: d.fips, lon: +d.lon, lat: +d.lat };
-            }, function(csv) {
+        d3.csv('data/sites.csv',
+               function(d) { return { id: d.fips, lon: +d.lon, lat: +d.lat }; },
+               function(csv) {
             sites = g2.selectAll('site')
                 .data(csv, function(d) { return d.id; })
               .enter().append('circle')
@@ -84,9 +84,11 @@ var drawMapPlot = (function(selector, data, quantizer) {
 
         function change(data, quantizer) {
             resizeCanvas(canvas);
-            sites.data(data, function(d) { return d.id; });
+            sites.data(data, function(d) { return d.id; })
+                .transition().duration(window.duration)
+                .style('fill', function(d) { return quantizer.color(d); });
 
-            // apply quantizer to data
+            // prepare legend data
             var dataByIndex = d3.range(quantizer.size()).map(function(i) {
                 return { index: i, ids: [] };
             });
@@ -94,12 +96,6 @@ var drawMapPlot = (function(selector, data, quantizer) {
                 if (d.estimate != null) {
                     dataByIndex[quantizer.index(d)].ids.push(d.id);
                 }
-                var a = d3.select('#label-' + d.id),
-                    b = d3.select('#site-' + d.id);
-                if (a.classed('active')) { b.classed('active', true); }
-                if (a.classed('mouseover')) { b.classed('mouseover', true); }
-                b.transition().duration(window.duration)
-                    .style('fill', quantizer.color(d));
             });
 
             // legend data join
@@ -175,9 +171,7 @@ var drawMapPlot = (function(selector, data, quantizer) {
                 });
         }
 
-        return {
-            change: change
-        };
+        return { change: change };
     }
 
     function resizeCanvas(canvas) {
