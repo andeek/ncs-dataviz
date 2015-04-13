@@ -19,9 +19,7 @@ var drawBarPlots = (function(selector, datas) {
             }
         }
 
-        return {
-            change: change
-        };
+        return { change: change };
     }
 
     function drawLabels(canvas, data) {
@@ -65,9 +63,7 @@ var drawBarPlots = (function(selector, datas) {
             button.html(displaySort(button.property('value')));
         }
 
-        return {
-            change: changeXY
-        };
+        return { change: changeXY };
     }
 
     function drawPlot(canvas, index, data) {
@@ -176,9 +172,7 @@ var drawBarPlots = (function(selector, datas) {
             button.html(displaySort(button.property('value')));
         }
 
-        return {
-            change: changeXY
-        };
+        return { change: changeXY };
     }
 
     function resizeCanvas(canvas) {
