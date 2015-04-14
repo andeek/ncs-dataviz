@@ -19,10 +19,11 @@
 
         // draw
         var datas = [getData(datasets, 1), getData(datasets, 2)];
-        var quantizer = makeQuantizer(datas[getMapIndex()]);
+        var mapIndex = getMapIndex();
+        var quantizer = makeQuantizer(datas[mapIndex]);
         var barPlots = drawBarPlots('#bar-plots', datas);
-        var mapPlot = drawMapPlot('#map-plot', datas[getMapIndex()], quantizer);
-        var scatterPlot = drawScatterPlot('#scatter-plot', datasets, quantizer);
+        var mapPlot = drawMapPlot('#map-plot', datas[mapIndex], quantizer);
+        var scatterPlot = drawScatterPlot('#scatter-plot', datas, mapIndex, quantizer);
 
         // add event to dropdowns 'variable'
         $('.dropdown-menu').on('click', 'li a', function() {
@@ -31,17 +32,19 @@
             $(this).parents('.btn-group').find('.btn').val(s);
             datas = [getData(datasets, 1), getData(datasets, 2)];
             barPlots.change(datas);
-            quantizer = makeQuantizer(datas[getMapIndex()]);
-            mapPlot.change(datas[getMapIndex()], quantizer);
-            scatterPlot.change(quantizer);
+            mapIndex = getMapIndex();
+            quantizer = makeQuantizer(datas[mapIndex]);
+            mapPlot.change(datas[mapIndex], quantizer);
+            scatterPlot.change(datas, mapIndex, quantizer);
         });
 
         // add event to radio buttons 'map-index'
         $('#map-index-selector button').on('click', function() {
             $(this).addClass('active').siblings().removeClass('active');
-            quantizer = makeQuantizer(datas[getMapIndex()]);
-            mapPlot.change(datas[getMapIndex()], quantizer);
-            scatterPlot.change(quantizer);
+            mapIndex = getMapIndex();
+            quantizer = makeQuantizer(datas[mapIndex]);
+            mapPlot.change(datas[mapIndex], quantizer);
+            scatterPlot.change(datas, mapIndex, quantizer);
         });
 
         // add event to button 'clear'
@@ -68,8 +71,8 @@
         // add resize event
         $(window).on('resize', function() {
             barPlots.change(datas);
-            mapPlot.change(datas[getMapIndex()], quantizer);
-            scatterPlot.change(quantizer);
+            mapPlot.change(datas[mapIndex], quantizer);
+            scatterPlot.change(datas, mapIndex, quantizer);
         });
     }
 

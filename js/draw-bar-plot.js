@@ -222,10 +222,12 @@ var drawBarPlots = (function(selector, datas) {
             order = sort[1];
         if (index === 0) {
             var ids = datas[0]
+                .slice(0)
                 .sort(function(a, b) { return a.id - b.id; })
                 .map(function(d) { return d.id; });
         } else {
             var ids = datas[index - 1]
+                .slice(0)
                 .sort(function(a, b) {
                     return a.estimate !== b.estimate ?
                            a.estimate - b.estimate : a.id - b.id;
