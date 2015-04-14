@@ -4,9 +4,9 @@
         .defer(d3.json, 'data/ncs.json')
         .await(ready);
 
-    function ready(error, data1, data2) {
+    function ready(error, json1, json2) {
         // prepare datasets and dropdowns
-        var datasets = [reshape1(data1), reshape2(data2)];
+        var datasets = [reshape1(json1), reshape2(json2)];
         populateDropdown('#variable-1 + ul', datasets[0].keys());
         populateDropdown('#variable-2 + ul', datasets[1].keys());
 
@@ -17,10 +17,22 @@
             $(this).parents('.btn-group').find('.btn').val(s);
         });
 
+        // prepare input and its updating utilities
+        var datas, mapIndex, quantizer;
+        var getData = function(index) {
+            return datasets[index - 1].get(getVariable(index));
+        };
+        var changeDatas = function() {
+            datas = [getData(1), getData(2)];
+        };
+        var changeMapIndex = function() {
+            mapIndex = getMapIndex();
+            quantizer = makeQuantizer(datas[mapIndex]);
+        };
+
         // draw
-        var datas = [getData(datasets, 1), getData(datasets, 2)];
-        var mapIndex = getMapIndex();
-        var quantizer = makeQuantizer(datas[mapIndex]);
+        changeDatas();
+        changeMapIndex();
         var barPlots = drawBarPlots('#bar-plots', datas);
         var mapPlot = drawMapPlot('#map-plot', datas[mapIndex], quantizer);
         var scatterPlot = drawScatterPlot('#scatter-plot', datas, mapIndex, quantizer);
@@ -30,10 +42,9 @@
             var s = $(this).text();
             $(this).parents('.btn-group').find('.selection').text(s);
             $(this).parents('.btn-group').find('.btn').val(s);
-            datas = [getData(datasets, 1), getData(datasets, 2)];
+            changeDatas();
             barPlots.change(datas);
-            mapIndex = getMapIndex();
-            quantizer = makeQuantizer(datas[mapIndex]);
+            changeMapIndex();
             mapPlot.change(datas[mapIndex], quantizer);
             scatterPlot.change(datas, mapIndex, quantizer);
         });
@@ -41,8 +52,7 @@
         // add event to radio buttons 'map-index'
         $('#map-index-selector button').on('click', function() {
             $(this).addClass('active').siblings().removeClass('active');
-            mapIndex = getMapIndex();
-            quantizer = makeQuantizer(datas[mapIndex]);
+            changeMapIndex();
             mapPlot.change(datas[mapIndex], quantizer);
             scatterPlot.change(datas, mapIndex, quantizer);
         });
@@ -79,9 +89,9 @@
     function reshape1(data) {
         var rows = d3.map();
         for (var i = 0; i < data.variables.length; ++i) {
-            var row = d3.map();
+            var row = [];
             for (var j = 0; j < data.locations.length; ++j) {
-                row.set(data.fips[j], {
+                row.push({
                     variable  : data.variables[i],
                     type      : data.types[i],
                     id        : data.fips[j],
@@ -99,10 +109,10 @@
     function reshape2(data) {
         var rows = d3.map();
         for (var i = 0; i < data.variables.length; ++i) {
-            var row = d3.map(),
+            var row = [],
                 variable = data.variables[i];
             for (var j = 0; j < data.locations.length; ++j) {
-                row.set(data.fips[j], {
+                row.push({
                     variable : data.variables[i],
                     type     : 'percentage',
                     id       : data.fips[j],
@@ -121,10 +131,6 @@
           .enter().append('li').append('a')
             .attr('href', '#')
             .text(function(d) { return d; });
-    }
-
-    function getData(datasets, index) {
-        return datasets[index - 1].get(getVariable(index)).values();
     }
 
     function makeQuantizer(data) {

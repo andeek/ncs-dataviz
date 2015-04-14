@@ -92,7 +92,6 @@ var drawScatterPlot = (function(selector, datas, index, quantizer) {
                 .text('NCS: ' + data2[0].variable);
 
             var focus = [data1, data2][index];
-
             var data = d3.range(focus.length).map(function(i) {
                 return {
                     id: focus[i].id,
@@ -121,9 +120,7 @@ var drawScatterPlot = (function(selector, datas, index, quantizer) {
                      parseInt(d3.select('nav').style('height')) -
                      parseInt(d3.select('.controls').style('height'));
         height = height * .95 / 2 - 5;
-        canvas
-            .attr('width', width)
-            .attr('height', height);
+        canvas.attr('width', width).attr('height', height);
     }
 
     function computeBbox(canvas) {

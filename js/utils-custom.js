@@ -4,6 +4,12 @@ function getVariable(index) {
     return d3.select('#variable-' + index).property('value');
 }
 
+function getMapIndex() {
+    var index = d3.select('#map-index-selector button.active')
+        .attr('id').split('-')[2];
+    return parseInt(index) - 1;
+}
+
 function getSort() {
     var s = '';
     d3.selectAll('.sort').each(function() {
@@ -23,40 +29,6 @@ function displaySort(value) {
     return s[parseInt(value) + 1];
 }
 
-function getMapIndex() {
-    var index = d3.select('#map-index-selector button.active')
-        .attr('id').split('-')[2];
-    return parseInt(index) - 1;
-}
-
-function computeCorrelation(x, y) {
-    var n = 0,
-        sum_x = 0,
-        sum_y = 0,
-        sum_x2 = 0,
-        sum_y2 = 0,
-        sum_xy = 0;
-
-    for (var i = 0; i < x.length; ++i) {
-        if (x[i] !== null && y[i] !== null) {
-            n += 1;
-            sum_x += x[i];
-            sum_y += y[i];
-            sum_x2 += x[i] * x[i];
-            sum_y2 += y[i] * y[i];
-            sum_xy += x[i] * y[i];
-        }
-    }
-
-    return (n * sum_xy - sum_x * sum_y) /
-           Math.sqrt(n * sum_x2 - sum_x * sum_x) /
-           Math.sqrt(n * sum_y2 - sum_y * sum_y);
-}
-
-function capitalize(s) {
-    return s.charAt(0).toUpperCase() + s.slice(1);
-}
-
 function getFormatterForTip(d) {
     if (d.type === 'percentage') {
         return d3.format('.2%');
@@ -65,6 +37,14 @@ function getFormatterForTip(d) {
     } else {
         return d3.format('g');
     }
+}
+
+function getMinValue(data) {
+    return d3.min(data, function(d) { return d.estimate; });
+}
+
+function getMaxValue(data) {
+    return d3.max(data, function(d) { return d.estimate; });
 }
 
 function getFormatterForAxis(d) {
@@ -81,14 +61,6 @@ function getFormatterForAxis(d) {
     } else {
         return d3.format('g');
     }
-}
-
-function getMinValue(data) {
-    return d3.min(data, function(d) { return d.estimate; });
-}
-
-function getMaxValue(data) {
-    return d3.max(data, function(d) { return d.estimate; });
 }
 
 function tipHtml(d) {
