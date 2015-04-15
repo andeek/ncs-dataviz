@@ -100,7 +100,9 @@ function removeActive(selector) {
 function mouseover(id) {
     addMouseover('#label-' + id);
     addMouseover('#bar-1-' + id);
+    addMouseover('#na-1-' + id);
     addMouseover('#bar-2-' + id);
+    addMouseover('#na-2-' + id);
     addMouseover('#site-' + id);
     addMouseover('#point-' + id);
 }
@@ -108,7 +110,9 @@ function mouseover(id) {
 function mouseout(id) {
     removeMouseover('#label-' + id);
     removeMouseover('#bar-1-' + id);
+    removeMouseover('#na-1-' + id);
     removeMouseover('#bar-2-' + id);
+    removeMouseover('#na-2-' + id);
     removeMouseover('#site-' + id);
     removeMouseover('#point-' + id);
 }
@@ -116,7 +120,9 @@ function mouseout(id) {
 function activate(id) {
     addActive('#label-' + id);
     addActive('#bar-1-' + id);
+    addActive('#na-1-' + id);
     addActive('#bar-2-' + id);
+    addActive('#na-2-' + id);
     addActive('#site-' + id);
     addActive('#point-' + id);
 }
@@ -124,7 +130,9 @@ function activate(id) {
 function deactivate(id) {
     removeActive('#label-' + id);
     removeActive('#bar-1-' + id);
+    removeActive('#na-1-' + id);
     removeActive('#bar-2-' + id);
+    removeActive('#na-2-' + id);
     removeActive('#site-' + id);
     removeActive('#point-' + id);
 }

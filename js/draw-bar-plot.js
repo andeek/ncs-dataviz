@@ -71,25 +71,24 @@ var drawBarPlots = (function(selector, datas) {
 
         var tip = d3.tip()
             .attr('class', 'd3-tip')
-            .offset([-10, 0])
+            // .offset([-10, 0])
             .html(tipHtml);
         g.call(tip);
+
+        var nas = g.append('g')
+            .selectAll('.na')
+            .data(data, getId)
+          .enter().append('text')
+            .attr('class', 'na')
+            .attr('id', function(d) { return 'na-' + index + '-' + d.id; })
+            .attr('dy', '.35em');
 
         var bars = g.append('g')
             .selectAll('.bar')
             .data(data, getId)
           .enter().append('rect')
             .attr('class', 'bar')
-            .attr('id', function(d) { return 'bar-' + index + '-' + d.id; })
-            .on('mouseover', function(d) {
-                tip.show(d);
-                mouseover(d.id);
-            })
-            .on('mouseout', function(d) {
-                tip.hide();
-                mouseout(d.id);
-            })
-            .on('click', function(d) { toggleActive(d.id); });
+            .attr('id', function(d) { return 'bar-' + index + '-' + d.id; });
 
         var xAxisContainer = g.append('g')
             .attr('class', 'x axis');
@@ -110,6 +109,24 @@ var drawBarPlots = (function(selector, datas) {
                 .attr('class', 'm2se')
                 .attr('id', function(d) { return 'm2se-' + index + '-' + d.id; });
         }
+
+        var barLayers = g.append('g')
+            .selectAll('.bar-layer')
+            .data(data, getId)
+          .enter().append('rect')
+            .attr('class', 'bar-layer')
+            .attr('id', function(d) { return 'bar-layer-' + index + '-' + d.id; })
+            .on('mouseover', function(d) {
+                var w1 = parseFloat(d3.select('#bar-' + index + '-' + d.id).attr('width')),
+                    w2 = parseFloat(d3.select('#bar-layer-' + index + '-' + d.id).attr('width'));
+                tip.offset([-10, (w1 - w2) / 2]).show(d);
+                mouseover(d.id);
+            })
+            .on('mouseout', function(d) {
+                tip.hide();
+                mouseout(d.id);
+            })
+            .on('click', function(d) { toggleActive(d.id); });
 
         var button = makeSortButton(index);
         button.property('value', '0');
@@ -137,9 +154,22 @@ var drawBarPlots = (function(selector, datas) {
                 .attr('class', 'grid-line')
                 .attr('y2', -height);
 
+            nas.data(data, getId)
+                .transition().duration(window.duration)
+                .attr('x', x.range()[0])
+                .attr('y', function(d) { return y(d.id) + y.rangeBand() / 2; })
+                .text(function(d) { return d.estimate == null ? 'N.A.' : ''; });
+
+            barLayers.data(data, getId)
+                .transition().duration(window.duration)
+                .attr('x', x.range()[0])
+                .attr('width', width)
+                .attr('y', function(d) { return y(d.id); })
+                .attr('height', y.rangeBand());
+
             bars.data(data, getId)
                 .transition().duration(window.duration)
-                .attr('x', function(d) { return x.range()[0]; })
+                .attr('x', x.range()[0])
                 .attr('width', function(d) { return x(d.estimate); })
                 .attr('y', function(d) { return y(d.id); })
                 .attr('height', y.rangeBand());
@@ -201,12 +231,10 @@ var drawBarPlots = (function(selector, datas) {
             };
         } else {
             var labelsOuterWidth = labelsWidth + hspaceAfterLabels,
-                plotsOuterWidth = width - margin.left - margin.right -
-                                  labelsOuterWidth,
+                plotsOuterWidth = width - margin.left - margin.right - labelsOuterWidth,
                 plotOuterWidth = (plotsOuterWidth + hspaceAfterPlot) / numPlots,
                 plotWidth = plotOuterWidth - hspaceAfterPlot;
-            var left = margin.left + labelsOuterWidth +
-                       plotOuterWidth * (index - 1);
+            var left = margin.left + labelsOuterWidth + plotOuterWidth * (index - 1);
             return {
                 top: margin.top,
                 left: left,

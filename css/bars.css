@@ -3,7 +3,6 @@
     width: 100%;
 }
 
-
 .bar {
     fill: steelblue;
     cursor: pointer;
@@ -15,6 +14,11 @@
 
 .bar.mouseover {
     fill: purple;
+}
+
+.bar-layer {
+    fill: transparent;
+    cursor: pointer;
 }
 
 .m1se {
@@ -60,6 +64,22 @@
     /*font-weight: 900;*/
     font-weight: 700;
     font-size: 12px;
+}
+
+.na {
+    fill: #666;
+    font-weight: 400;
+    font-size: 10px;
+}
+
+.na.active {
+    fill: red;
+    font-weight: 700;
+}
+
+.na.mouseover {
+    fill: purple;
+    font-weight: 700;
 }
 
 .sort-controls {
