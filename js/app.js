@@ -145,7 +145,14 @@
         // make interval labels
         var ticks = interval.ticks().map(getFormatterForAxis(data[0]));
         var labels = d3.range(n).map(function(i) {
-            return ticks[i] + '-' + ticks[i + 1];
+            var s1 = ticks[i],
+                s2 = ticks[i + 1];
+            var c1 = s1[s1.length - 1],
+                c2 = s2[s2.length - 1];
+            if ((c1 === '%' || c1 === 'M') && c1 === c2) {
+                s1 = s1.slice(0, s1.length - 1);
+            }
+            return s1 + '-' + s2;
         });
 
         // map data to (n + 1) indices.
