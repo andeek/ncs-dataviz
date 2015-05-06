@@ -22,6 +22,6 @@ function computeCorrelation(x, y) {
            Math.sqrt(n * sum_y2 - sum_y * sum_y);
 }
 
-function capitalize(s) {
-    return s.charAt(0).toUpperCase() + s.slice(1);
-}
+// function capitalize(s) {
+//     return s.charAt(0).toUpperCase() + s.slice(1);
+// }

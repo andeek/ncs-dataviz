@@ -49,17 +49,17 @@ var drawScatterPlot = (function(selector, datas, index, quantizer) {
             .data(data1, getId)
           .enter().append('circle')
             .attr('class', 'point')
-            .attr('id', function(d) { return 'point-' + d.id; })
+            .attr('id', function(d) { return 'point-' + d.site.id; })
             .attr('r', 5)
             .on('mouseover', function(d) {
                 tip.show(d.d);
-                mouseover(d.id);
+                mouseover(d.site.id);
             })
             .on('mouseout', function(d) {
                 tip.hide();
-                mouseout(d.id);
+                mouseout(d.site.id);
             })
-            .on('click', function (d) { toggleActive(d.id); });
+            .on('click', function (d) { toggleActive(d.site.id); });
 
         function changeXY(bbox, data1, data2, index, quantizer) {
             g.attr('transform', 'translate(' + bbox.left + ',' + bbox.top + ')');
@@ -86,15 +86,15 @@ var drawScatterPlot = (function(selector, datas, index, quantizer) {
                 .call(xAxis);
             yAxisContainer.call(yAxis);
 
-            xAxisLabel.attr('x', width / 2).text('ACS: ' + data1[0].variable);
+            xAxisLabel.attr('x', width / 2).text('ACS: ' + data1[0].variable.name);
             yAxisLabel
                 .attr('transform', 'translate(-50,' + (height / 2) + ')rotate(-90)')
-                .text('NCS: ' + data2[0].variable);
+                .text('NCS: ' + data2[0].variable.name);
 
             var focus = [data1, data2][index];
             var data = d3.range(focus.length).map(function(i) {
                 return {
-                    id: focus[i].id,
+                    site: focus[i].site,
                     d: focus[i],
                     x: data1[i].estimate,
                     y: data2[i].estimate
@@ -150,18 +150,14 @@ var drawScatterPlot = (function(selector, datas, index, quantizer) {
     }
 
     function updateCorrelation(data1, data2) {
-        var x = data1.slice(0)
-            .sort(function(a, b) { return a.id - b.id; })
-            .map(function(d) { return d.estimate; });
-        var y = data2.slice(0)
-            .sort(function(a, b) { return a.id - b.id; })
-            .map(function(d) { return d.estimate; });
+        var x = data1.map(function(d) { return d.estimate; });
+        var y = data2.map(function(d) { return d.estimate; });
         var corr = computeCorrelation(x, y);
         d3.select('#correlation').html('&#x3c1; = ' + d3.format('.2f')(corr));
     }
 
     function getId(d) {
-        return d.id;
+        return d.site.id;
     }
 
     return draw;

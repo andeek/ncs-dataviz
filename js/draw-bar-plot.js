@@ -30,13 +30,13 @@ var drawBarPlots = (function(selector, datas) {
             .data(data, getId)
           .enter().append('text')
             .attr('class', 'label')
-            .attr('id', function(d) { return 'label-' + d.id; })
-            .text(function(d) { return d.site; })
+            .attr('id', function(d) { return 'label-' + d.site.id; })
+            .text(function(d) { return d.site.shortname; })
             .attr('dy', '.35em')
             .attr('text-anchor', 'end')
-            .on('mouseover', function(d) { mouseover(d.id); })
-            .on('mouseout', function(d) { mouseout(d.id); })
-            .on('click', function(d) { toggleActive(d.id); });
+            .on('mouseover', function(d) { mouseover(d.site.id); })
+            .on('mouseout', function(d) { mouseout(d.site.id); })
+            .on('click', function(d) { toggleActive(d.site.id); });
 
         // make labels invisible before appearing at initialized positions
         labels.attr('transform', 'translate(-200,0)');
@@ -54,7 +54,7 @@ var drawBarPlots = (function(selector, datas) {
 
             labels.transition().duration(window.duration)
                 .attr('transform', function(d) {
-                    var j = y(d.id) + y.rangeBand() / 2;
+                    var j = y(d.site.id) + y.rangeBand() / 2;
                     return 'translate(' + width + ',' + j + ')';
                 });
 
@@ -80,7 +80,7 @@ var drawBarPlots = (function(selector, datas) {
             .data(data, getId)
           .enter().append('text')
             .attr('class', 'na')
-            .attr('id', function(d) { return 'na-' + index + '-' + d.id; })
+            .attr('id', function(d) { return 'na-' + index + '-' + d.site.id; })
             .attr('dy', '.35em');
 
         var bars = g.append('g')
@@ -88,7 +88,7 @@ var drawBarPlots = (function(selector, datas) {
             .data(data, getId)
           .enter().append('rect')
             .attr('class', 'bar')
-            .attr('id', function(d) { return 'bar-' + index + '-' + d.id; });
+            .attr('id', function(d) { return 'bar-' + index + '-' + d.site.id; });
 
         var xAxisContainer = g.append('g')
             .attr('class', 'x axis');
@@ -100,14 +100,14 @@ var drawBarPlots = (function(selector, datas) {
                 .data(data, getId)
               .enter().append('line')
                 .attr('class', 'm1se')
-                .attr('id', function(d) { return 'm1se-' + index + '-' + d.id; });
+                .attr('id', function(d) { return 'm1se-' + index + '-' + d.site.id; });
             
             m2se = g.append('g')
                 .selectAll('.m2se')
                 .data(data, getId)
               .enter().append('line')
                 .attr('class', 'm2se')
-                .attr('id', function(d) { return 'm2se-' + index + '-' + d.id; });
+                .attr('id', function(d) { return 'm2se-' + index + '-' + d.site.id; });
         }
 
         var barLayers = g.append('g')
@@ -115,18 +115,18 @@ var drawBarPlots = (function(selector, datas) {
             .data(data, getId)
           .enter().append('rect')
             .attr('class', 'bar-layer')
-            .attr('id', function(d) { return 'bar-layer-' + index + '-' + d.id; })
+            .attr('id', function(d) { return 'bar-layer-' + index + '-' + d.site.id; })
             .on('mouseover', function(d) {
-                var w1 = parseFloat(d3.select('#bar-' + index + '-' + d.id).attr('width')),
-                    w2 = parseFloat(d3.select('#bar-layer-' + index + '-' + d.id).attr('width'));
+                var w1 = parseFloat(d3.select('#bar-' + index + '-' + d.site.id).attr('width')),
+                    w2 = parseFloat(d3.select('#bar-layer-' + index + '-' + d.site.id).attr('width'));
                 tip.offset([-10, (w1 - w2) / 2]).show(d);
-                mouseover(d.id);
+                mouseover(d.site.id);
             })
             .on('mouseout', function(d) {
                 tip.hide();
-                mouseout(d.id);
+                mouseout(d.site.id);
             })
-            .on('click', function(d) { toggleActive(d.id); });
+            .on('click', function(d) { toggleActive(d.site.id); });
 
         var button = makeSortButton(index);
         button.property('value', '0');
@@ -157,21 +157,21 @@ var drawBarPlots = (function(selector, datas) {
             nas.data(data, getId)
                 .transition().duration(window.duration)
                 .attr('x', x.range()[0])
-                .attr('y', function(d) { return y(d.id) + y.rangeBand() / 2; })
+                .attr('y', function(d) { return y(d.site.id) + y.rangeBand() / 2; })
                 .text(function(d) { return d.estimate == null ? 'N.A.' : ''; });
 
             barLayers.data(data, getId)
                 .transition().duration(window.duration)
                 .attr('x', x.range()[0])
                 .attr('width', width)
-                .attr('y', function(d) { return y(d.id); })
+                .attr('y', function(d) { return y(d.site.id); })
                 .attr('height', y.rangeBand());
 
             bars.data(data, getId)
                 .transition().duration(window.duration)
                 .attr('x', x.range()[0])
                 .attr('width', function(d) { return x(d.estimate); })
-                .attr('y', function(d) { return y(d.id); })
+                .attr('y', function(d) { return y(d.site.id); })
                 .attr('height', y.rangeBand());
 
             if ('stderror' in data[0]) {
@@ -179,8 +179,8 @@ var drawBarPlots = (function(selector, datas) {
                     .transition().duration(window.duration)
                     .attr('x1', function(d) { return x(d.estimate - d.stderror); })
                     .attr('x2', function(d) { return x(d.estimate - d.stderror); })
-                    .attr('y1', function(d) { return y(d.id); })
-                    .attr('y2', function(d) { return y(d.id) + y.rangeBand(); })
+                    .attr('y1', function(d) { return y(d.site.id); })
+                    .attr('y2', function(d) { return y(d.site.id) + y.rangeBand(); })
                     .attr('display', function(d) {
                         return d.estimate - d.stderror <= x.domain()[0] ?
                                'none' : 'inherit';
@@ -189,8 +189,8 @@ var drawBarPlots = (function(selector, datas) {
                     .transition().duration(window.duration)
                     .attr('x1', function(d) { return x(d.estimate - d.stderror * 2); })
                     .attr('x2', function(d) { return x(d.estimate - d.stderror * 2); })
-                    .attr('y1', function(d) { return y(d.id); })
-                    .attr('y2', function(d) { return y(d.id) + y.rangeBand(); })
+                    .attr('y1', function(d) { return y(d.site.id); })
+                    .attr('y2', function(d) { return y(d.site.id) + y.rangeBand(); })
                     .attr('display', function(d) {
                         return d.estimate - d.stderror * 2 <= x.domain()[0] ?
                                'none' : 'inherit';
@@ -215,7 +215,7 @@ var drawBarPlots = (function(selector, datas) {
 
     function computeBbox(canvas, numPlots, index) {
         var margin = { top: 25, left: 20, bottom: 40, right: 20 },
-            labelsWidth = 150,
+            labelsWidth = 120,
             hspaceAfterLabels = 10,
             hspaceAfterPlot = 30;
 
@@ -250,15 +250,23 @@ var drawBarPlots = (function(selector, datas) {
             order = sort[1];
         if (index === 0) {
             var ids = datas[0].slice(0)
-                .sort(function(a, b) { return a.id - b.id; })
-                .map(function(d) { return d.id; });
+                .sort(function(a, b) {
+                    var aa = a.site.shortname.split(', '),
+                        bb = b.site.shortname.split(', ');
+                    var s = aa[1].localeCompare(bb[1]);
+                    if (s === 0) {
+                        s = aa[0].localeCompare(bb[0]);
+                    }
+                    return s;
+                })
+                .map(function(d) { return d.site.id; });
         } else {
             var ids = datas[index - 1].slice(0)
                 .sort(function(a, b) {
                     return a.estimate !== b.estimate ?
                            a.estimate - b.estimate : a.id - b.id;
                 })
-                .map(function(d) { return d.id; });
+                .map(function(d) { return d.site.id; });
         }
         return order === 'ascending' ? ids : ids.reverse();
     }
@@ -287,7 +295,7 @@ var drawBarPlots = (function(selector, datas) {
     }
 
     function getId(d) {
-        return d.id;
+        return d.site.id;
     }
 
     return drawAll;

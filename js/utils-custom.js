@@ -30,9 +30,9 @@ function displaySort(value) {
 }
 
 function getFormatterForTip(d) {
-    if (d.type === 'percentage') {
+    if (d.variable.type === 'Percentage') {
         return d3.format('.2%');
-    } else if (d.type === 'count') {
+    } else if (d.variable.type === 'Count') {
         return d3.format('n');
     } else {
         return d3.format('g');
@@ -48,15 +48,15 @@ function getMaxValue(data) {
 }
 
 function getFormatterForAxis(d) {
-    if (d.type === 'percentage') {
+    if (d.variable.type === 'Percentage') {
         return function(x) {
             var s = (x * 100).toFixed(4).split('.');
             var f = s[1].replace(/0+$/g, '');
             return (f.length === 0 ? s[0] : s[0] + '.' + f) + '%';
         };
-    } else if (d.type === 'year') {
+    } else if (d.variable.type === 'Year') {
         return d3.format('d');
-    } else if (d.type === 'count') {
+    } else if (d.variable.type === 'Count') {
         return d3.format('s');
     } else {
         return d3.format('g');
@@ -64,19 +64,22 @@ function getFormatterForAxis(d) {
 }
 
 function tipHtml(d) {
-    var keys = ['variable', 'type', 'id', 'site', 'sitegroup',
-                'estimate', 'stderror'],
-        displays = ['Variable', 'Data Type', 'FIPS', 'Site', 'Site Group',
-                    'Estimate', 'Standard Error'],
-        functions = [String, capitalize, String, String, capitalize,
-                     getFormatterForTip(d), getFormatterForTip(d)];
+    var keys = ['Variable', 'Variable Type',
+                'Site', 'Site FIPS', 'Site ROC', 'Site Group'],
+        values = [d.variable.name, d.variable.type,
+                  d.site.name, d.site.fips, d.site.roc, d.site.group];
     var s = [];
     for (var i = 0; i < keys.length; ++i) {
-        if (keys[i] in d) {
-            var v = d[keys[i]];
-            v = v == null ? 'N.A.' : functions[i](v);
-            s.push(displays[i] + ': ' + v);
-        }
+        var k = keys[i];
+        var v = values[i] == null ? 'N.A.' : values[i];
+        s.push(k + ': ' + v);
+    }
+    var formatter = getFormatterForTip(d);
+    s.push('Value: ' +
+           (d.estimate == null ? 'N.A.' : formatter(d.estimate)));
+    if ('stderror' in d) {
+        s.push('Standard Error: ' +
+               (d.stderror == null ? 'N.A.' : formatter(d.stderror)));
     }
     return s.join('<br>');
 }

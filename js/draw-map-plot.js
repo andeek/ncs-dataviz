@@ -48,27 +48,25 @@ var drawMapPlot = (function(selector, data, quantizer) {
                 .attr('d', path);
         });
 
-        d3.csv('data/sites.csv',
-               function(d) { return { id: d.fips, lon: +d.lon, lat: +d.lat }; },
-               function(csv) {
+        d3.json('data/sites.json', function(error, json) {
             sites = g2.selectAll('site')
-                .data(csv, function(d) { return d.id; })
+                .data(reshapeSites(json), getId)
               .enter().append('circle')
                 .attr('class', 'site')
-                .attr('cx', function(d) { return projection([d.lon, d.lat])[0]; })
-                .attr('cy', function(d) { return projection([d.lon, d.lat])[1]; })
+                .attr('cx', function(d) { return projection([d.site.lon, d.site.lat])[0]; })
+                .attr('cy', function(d) { return projection([d.site.lon, d.site.lat])[1]; })
                 .attr('r', 5)
-                .attr('id', function(d) { return 'site-' + d.id; })
+                .attr('id', function(d) { return 'site-' + d.site.id; })
                 .on('mouseover', function(d) {
                     tip.show(d);
-                    mouseover(d.id);
+                    mouseover(d.site.id);
                 })
                 .on('mouseout', function(d) {
                     tip.hide();
-                    mouseout(d.id);
+                    mouseout(d.site.id);
                 })
                 .on('click', function(d) {
-                    toggleActive(d.id);
+                    toggleActive(d.site.id);
                 });
 
             // initialize
@@ -84,7 +82,7 @@ var drawMapPlot = (function(selector, data, quantizer) {
 
         function change(data, quantizer) {
             resizeCanvas(canvas);
-            sites.data(data, function(d) { return d.id; })
+            sites.data(data, getId)
                 .transition().duration(window.duration)
                 .style('fill', function(d) { return quantizer.color(d); });
 
@@ -94,7 +92,7 @@ var drawMapPlot = (function(selector, data, quantizer) {
             });
             data.forEach(function(d) {
                 if (d.estimate != null) {
-                    dataByIndex[quantizer.index(d)].ids.push(d.id);
+                    dataByIndex[quantizer.index(d)].ids.push(d.site.id);
                 }
             });
 
@@ -135,7 +133,7 @@ var drawMapPlot = (function(selector, data, quantizer) {
                 right: width - margin
             };
             title.transition().duration(window.duration)
-                .text(data[0].variable)
+                .text(data[0].variable.name)
                 .attr('transform',
                       'translate(' + position.right + ',' + position.top + ')');
 
@@ -181,6 +179,24 @@ var drawMapPlot = (function(selector, data, quantizer) {
                      parseInt(d3.select('.controls').style('height'));
         height = height * .95 / 2 - 5;
         canvas.attr('width', width).attr('height', height);
+    }
+
+    function getId(d) {
+        return d.site.id;
+    }
+
+    function reshapeSites(sites) {
+        var res = [];
+        for (var i = 0; i < sites.id.length; ++i) {
+            res.push({
+                site: {
+                    id  : sites.id[i],
+                    lat : sites.lat[i],
+                    lon : sites.lon[i]
+                }
+            });
+        }
+        return res;
     }
 
     return draw;

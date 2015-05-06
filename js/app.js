@@ -1,12 +1,14 @@
 (function() {
     queue()
+        .defer(d3.json, 'data/sites.json')
         .defer(d3.json, 'data/acs.json')
         .defer(d3.json, 'data/ncs.json')
         .await(ready);
 
-    function ready(error, json1, json2) {
+    function ready(error, json0, json1, json2) {
         // prepare datasets and dropdowns
-        var datasets = [reshape1(json1), reshape2(json2)];
+        var sites = reshapeSites(json0);
+        var datasets = [reshapeData(json1, sites), reshapeData(json2, sites)];
         populateDropdown('#variable-1 + ul', datasets[0].keys());
         populateDropdown('#variable-2 + ul', datasets[1].keys());
 
@@ -86,41 +88,42 @@
         });
     }
 
-    function reshape1(data) {
+    function reshapeSites(sites) {
         var rows = d3.map();
-        for (var i = 0; i < data.variables.length; ++i) {
-            var row = [];
-            for (var j = 0; j < data.locations.length; ++j) {
-                row.push({
-                    variable  : data.variables[i],
-                    type      : data.types[i],
-                    id        : data.fips[j],
-                    site      : data.locations[j],
-                    sitegroup : data.sitegroups[j],
-                    estimate  : data.estimates[i][j],
-                    stderror  : data.stderrors[i][j]
-                });
-            }
-            rows.set(data.variables[i], row);
+        for (var i = 0; i < sites.id.length; ++i) {
+            var row = {
+                id        : sites.id[i],
+                fips      : sites.fips[i],
+                name      : sites.name[i],
+                shortname : sites.shortname[i],
+                roc       : sites.roc[i],
+                group     : sites.group[i]
+            };
+            rows.set(row.id, row);
         }
         return rows;
     }
 
-    function reshape2(data) {
+    function reshapeData(data, sites) {
         var rows = d3.map();
-        for (var i = 0; i < data.variables.length; ++i) {
-            var row = [],
-                variable = data.variables[i];
-            for (var j = 0; j < data.locations.length; ++j) {
-                row.push({
-                    variable : data.variables[i],
-                    type     : 'percentage',
-                    id       : data.fips[j],
-                    site     : data.locations[j],
-                    estimate : data[variable][j]
-                });
+        for (var i = 0; i < data.variable_names.length; ++i) {
+            var row = [];
+            for (var j = 0; j < data.site_ids.length; ++j) {
+                var e = {
+                    variable : {
+                        name : data.variable_names[i],
+                        type : data.variable_types[i]
+                    },
+                    site : sites.get(data.site_ids[j]),
+                    estimate : data.estimates[i][j]
+                };
+                if ('stderrors' in data) {
+                    e['stderror'] = data.stderrors[i][j];
+                }
+                row.push(e);
             }
-            rows.set(data.variables[i], row);
+            row.sort(function(a, b) { return a.site.id.localeCompare(b.site.id); })
+            rows.set(data.variable_names[i], row);
         }
         return rows;
     }
