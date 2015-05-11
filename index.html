@@ -6,10 +6,12 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <link rel="stylesheet" href="css/lib/bootstrap.min.css">
+<link rel="stylesheet" href="css/lib/selectize.bootstrap3.css">
 <link rel="stylesheet" href="css/base.css">
 <link rel="stylesheet" href="css/bars.css">
 <link rel="stylesheet" href="css/map.css">
 <link rel="stylesheet" href="css/scatterplot.css">
+<link rel="stylesheet" href="css/selectize-custom.css">
 
 <script src="js/lib/jquery-1.11.1.min.js"></script>
 <script src="js/lib/bootstrap.min.js"></script>
@@ -45,24 +47,8 @@
 
 	<div class="row controls">
 		<div class="col-md-12">
-			<div class="btn-group">
-				<button type="button" class="btn btn-default dropdown-toggle"
-						data-toggle="dropdown" aria-expanded="false" 
-						id="variable-1">
-					ACS: <span class="selection"></span>
-					<span class="caret"></span>
-  				</button>
-				<ul class="dropdown-menu scrollable-menu" role="menu"></ul>
-			</div>
-			<div class="btn-group">
-				<button type="button" class="btn btn-default dropdown-toggle"
-						data-toggle="dropdown" aria-expanded="false" 
-						id="variable-2">
-					NCS: <span class="selection"></span>
-					<span class="caret"></span>
-  				</button>
-				<ul class="dropdown-menu scrollable-menu" role="menu"></ul>
-			</div>
+			<div class="btn-group"><select id="variable-1"></select></div>
+			<div class="btn-group"><select id="variable-2"></select></div>
 			<div class="btn-group pull-right" id="map-index-selector">
 				<button type="button" class="btn btn-default active"
 						id="map-index-1">
@@ -96,6 +82,7 @@
 </div><!-- /#page-container -->
 </div><!-- /#container -->
 
+<script src="js/lib/selectize.min.js"></script>
 <script src="js/lib/d3.v3.min.js"></script>
 <script src="js/lib/topojson.v1.min.js"></script>
 <script src="js/lib/queue.v1.min.js"></script>

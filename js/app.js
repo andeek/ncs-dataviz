@@ -9,15 +9,10 @@
         // prepare datasets and dropdowns
         var sites = reshapeSites(json0);
         var datasets = [reshapeData(json1, sites), reshapeData(json2, sites)];
-        populateDropdown('#variable-1 + ul', datasets[0].keys());
-        populateDropdown('#variable-2 + ul', datasets[1].keys());
-
-        // set default selection for dropdowns
-        $('.dropdown-menu').each(function() {
-            var s = $(this).find('li a:first').text();
-            $(this).parents('.btn-group').find('.selection').text(s);
-            $(this).parents('.btn-group').find('.btn').val(s);
-        });
+        populateDropdown('#variable-1', datasets[0].keys(), 'ACS');
+        populateDropdown('#variable-2', datasets[1].keys(), 'NCS');
+        $('#variable-1').parent().find('.selectize-input').addClass('acs');
+        $('#variable-2').parent().find('.selectize-input').addClass('ncs');
 
         // prepare input and its updating utilities
         var datas, mapIndex, quantizer;
@@ -40,15 +35,14 @@
         var scatterPlot = drawScatterPlot('#scatter-plot', datas, mapIndex, quantizer);
 
         // add event to dropdowns 'variable'
-        $('.dropdown-menu').on('click', 'li a', function() {
-            var s = $(this).text();
-            $(this).parents('.btn-group').find('.selection').text(s);
-            $(this).parents('.btn-group').find('.btn').val(s);
-            changeDatas();
-            barPlots.change(datas);
-            changeMapIndex();
-            mapPlot.change(datas[mapIndex], quantizer);
-            scatterPlot.change(datas, mapIndex, quantizer);
+        $('select').on('change', function() {
+            if (getVariable($(this).attr('id').split('-')[1]).length !== 0) {
+                changeDatas();
+                barPlots.change(datas);
+                changeMapIndex();
+                mapPlot.change(datas[mapIndex], quantizer);
+                scatterPlot.change(datas, mapIndex, quantizer);
+            }
         });
 
         // add event to radio buttons 'map-index'
@@ -128,12 +122,15 @@
         return rows;
     }
 
-    function populateDropdown(selector, data) {
-        d3.select(selector).selectAll('a')
+    function populateDropdown(selector, data, name) {
+        d3.select(selector).selectAll('option')
             .data(data)
-          .enter().append('li').append('a')
-            .attr('href', '#')
+          .enter().append('option')
+            .attr('value', function(d) { return d; })
             .text(function(d) { return d; });
+        $(selector).selectize({
+            placeholder : 'Enter or select ' + name + ' variable'
+        });
     }
 
     function makeQuantizer(data) {

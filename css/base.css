@@ -29,12 +29,6 @@ body {
     height: 10px;
 }
 
-.scrollable-menu {
-    height: auto;
-    max-height: 300px;
-    overflow-x: hidden;
-}
-
 .d3-tip {
     line-height: 1;
     font-size: 11px;

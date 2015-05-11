@@ -1,0 +1,95 @@
+.selectize-input {
+    padding-right: 32px;
+    min-width: 100px;
+    z-index: 0;
+}
+
+.selectize-dropdown {
+    min-width: 420px;
+}
+
+.selectize-dropdown-content {
+    max-height: 300px;
+}
+
+.selectize-input,
+.selectize-dropdown {
+    font-size: 14px;
+}
+
+.selectize-input.acs:before {
+    content: 'ACS: ';
+}
+
+.selectize-input.ncs:before {
+    content: 'NCS: ';
+}
+
+/* below is from bootstrap.css*/
+
+.selectize-input {
+  color: #333;
+  background-color: #fff;
+  border-color: #ccc;
+}
+.selectize-input:focus,
+.selectize-input.focus {
+  color: #333;
+  background-color: #e6e6e6;
+  border-color: #8c8c8c;
+}
+.selectize-input:hover {
+  color: #333;
+  background-color: #e6e6e6;
+  border-color: #adadad;
+}
+.selectize-input:active,
+.selectize-input.active,
+.open > .dropdown-toggle.selectize-input {
+  color: #333;
+  background-color: #e6e6e6;
+  border-color: #adadad;
+}
+.selectize-input:active:hover,
+.selectize-input.active:hover,
+.open > .dropdown-toggle.selectize-input:hover,
+.selectize-input:active:focus,
+.selectize-input.active:focus,
+.open > .dropdown-toggle.selectize-input:focus,
+.selectize-input:active.focus,
+.selectize-input.active.focus,
+.open > .dropdown-toggle.selectize-input.focus {
+  color: #333;
+  background-color: #d4d4d4;
+  border-color: #8c8c8c;
+}
+.selectize-input:active,
+.selectize-input.active,
+.open > .dropdown-toggle.selectize-input {
+  background-image: none;
+}
+.selectize-input.disabled,
+.selectize-input[disabled],
+fieldset[disabled] .selectize-input,
+.selectize-input.disabled:hover,
+.selectize-input[disabled]:hover,
+fieldset[disabled] .selectize-input:hover,
+.selectize-input.disabled:focus,
+.selectize-input[disabled]:focus,
+fieldset[disabled] .selectize-input:focus,
+.selectize-input.disabled.focus,
+.selectize-input[disabled].focus,
+fieldset[disabled] .selectize-input.focus,
+.selectize-input.disabled:active,
+.selectize-input[disabled]:active,
+fieldset[disabled] .selectize-input:active,
+.selectize-input.disabled.active,
+.selectize-input[disabled].active,
+fieldset[disabled] .selectize-input.active {
+  background-color: #fff;
+  border-color: #ccc;
+}
+.selectize-input .badge {
+  color: #fff;
+  background-color: #333;
+}
