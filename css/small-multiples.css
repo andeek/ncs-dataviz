@@ -1,0 +1,29 @@
+.vis {
+    width: 100%;
+    margin: 0 auto;
+}
+.vis div {
+    float: left;
+    position: relative;
+}
+.axis path,
+.axis line {
+  fill: none;
+  stroke: #000;
+  shape-rendering: crispEdges;
+}
+
+.bar {
+  fill: steelblue;
+}
+
+.y.axis {
+  font-size: 8px;
+}
+.y.axis path {
+  display: none;
+}
+.y.axis .title {
+  font-size: 12px;
+  font-weight: bold;
+}
