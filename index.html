@@ -2,16 +2,11 @@
 <html>
 <head>
 
-<title>ACS/NCS County-Level Comparisons</title>
+<title>NCS County-Level Analysis</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <link rel="stylesheet" href="css/lib/bootstrap.min.css">
-<link rel="stylesheet" href="css/lib/selectize.bootstrap3.css">
 <link rel="stylesheet" href="css/base.css">
-<link rel="stylesheet" href="css/bars.css">
-<link rel="stylesheet" href="css/map.css">
-<link rel="stylesheet" href="css/scatterplot.css">
-<link rel="stylesheet" href="css/selectize-custom.css">
 
 <script src="js/lib/jquery-1.11.1.min.js"></script>
 <script src="js/lib/bootstrap.min.js"></script>
@@ -35,71 +30,140 @@
 			<span class="icon-bar"></span>
 		</button>
 	</div>
-	<a class="navbar-brand" href="#">ACS/NCS County-Level Comparisons</a>
-		<div class="navbar-collapse collapse">
-		<ul class="nav navbar-nav navbar-left">
-			<li><a href="summary.html">Summary</a></li>
-			<!--<li><a href="#">Correlation: <span id="correlation"><span></a></li>-->
+	<a href="/" class="navbar-brand">NCS County-Level Analysis</a>
+	<nav class="collapse navbar-collapse" role="navigation">
+		<ul class="nav navbar-nav">
+			<li>
+				<a href="summary.html">Summary</a>
+			</li>
+			<li>
+				<a href="comparisons.html">Comparisons</a>
+			</li>
+			<li>
+				<a href="#">Over Time</a>
+			</li>
 		</ul>
+	</nav>
 	</div>
 </nav>
 
-<div id="page-container">
-
-	<div class="row controls">
-		<div class="col-md-12">
-			<div class="btn-group"><select id="variable-1"></select></div>
-			<div class="btn-group"><select id="variable-2"></select></div>
-			<div class="btn-group pull-right" id="map-index-selector">
-				<button type="button" class="btn btn-default active"
-						id="map-index-1">
-					ACS
-  				</button>
-  				<button type="button" class="btn btn-default" id="map-index-2">
-					NCS
-  				</button>
-			</div>
-			<div class="space-below-controls"></div>
-		</div>
-	</div>
-
+<!-- Begin Body -->
+<div id="page-container" style="padding-left: 50px; padding-right: 50px;">
 	<div class="row">
-		<div class="col-md-6">
-			<div class="sort-controls">
-				<div class="btn-group btn-group-xs sort-btn-group">
-					<button type="button" class="btn btn-default" id="clear">
-						clear
-					</button>
-				</div>
-			</div>
-			<svg class="bar-plots" id="bar-plots"></svg>
-		</div>
-		<div class="col-md-6">
-			<svg class="map-plot" id="map-plot"></svg>
-			<svg class="scatter-plot" id="scatter-plot"></svg>
-		</div>
-	</div>
+  			<div class="col-md-3" id="leftCol">
+				<div id="spacer" style="height: 20px"></div>
+				<div class="well">
+              	<ul class="nav nav-stacked" id="sidebar">
+                  <li><a href="#about">About</a></li>
+                  <li><a href="#apps">Applications</a></li>
+                  <li><a href="#help">Help</a></li>
+                  <li><a href="#contact">Contact</a></li>
+              	</ul>
+  				</div>
 
-</div><!-- /#page-container -->
-</div><!-- /#container -->
+      		</div>
+      		<div class="col-md-9">
 
-<script src="js/lib/selectize.min.js"></script>
-<script src="js/lib/d3.v3.min.js"></script>
-<script src="js/lib/topojson.v1.min.js"></script>
-<script src="js/lib/queue.v1.min.js"></script>
-<script src="js/lib/d3.tip.v0.6.3.js"></script>
-<script src="js/utils-general.js"></script>
-<script src="js/utils-custom.js"></script>
-<script src="js/draw-bar-plot.js"></script>
-<script src="js/draw-map-plot.js"></script>
-<script src="js/draw-scatter-plot.js"></script>
-<script src="js/app.js"></script>
+              	<h2 id="about">About</h2>
+              	<p>
+									The National Childrens Study (NCS) was a planned large-scale, long-term study of U.S. children and their mothers and fathers designed to study environmental influences on child health and development. It was authorized by the Children's Health Act of 2000.
+								</p>
+              	<div class="row">
+                  <div class="col-md-6">
+                    <div class="panel panel-default">
+                      <div class="panel-heading"><h3>Vanguard Study</h3></div>
+                      <div class="panel-body">The NCS Vanguard (Pilot) Study began in 2009, testing methods and procedures planned for use in a larger Main Study. When recruitment ended in July 2013, the Vanguard Study had enrolled approximately 5,000 children in 40 locations across the country.
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-md-6">
+                      <div class="panel panel-default">
+                      <div class="panel-heading"><h3>Planned Main Study</h3></div>
+                      <div class="panel-body">The planned NCS Main Study would have followed 100,000 children from before birth to age 21. However, the NIH Director decided to close the NCS on December 12, 2014, following the advice of an expert review group.
+                    </div>
+                  </div>
+              	</div>
+							</div>
+							<p>
+								The NCS Vanguard Study enrolled 5,726 participants at 40 locations around the country. It collected data in multiple phases: Initial Vanguard Study (2009–2010), Alternate Recruitment Substudy (Minimal and Expanded Visits; 2010–2012), Provider-Based Sampling Substudy (2012–2014), and Post-Recruitment Follow-Up (2014). It also evaluated five different recruitment strategies: one in the initial phase, three in the second phase, and one more in the third phase.
+							</p><p>
+								The initial phase of recruitment for the Vanguard Study (Initial Vanguard Study) began in 2009. Data collectors canvassed neighborhoods to locate and enroll women who were pregnant or were likely to become pregnant. After a year, fewer participants had been enrolled than was expected. The second phase of recruitment (Alternative Recruitment Substudy) began in 2010. This phase compared three recruitment strategies to assess their effectiveness. By 2012, one method (Provider-Based Recruitment) was clearly the most efficient. The third phase (Provider-Based Sampling) began in 2012. This phase used the most efficient recruitment strategy from the second phase and enhanced it through the use of an altered sampling strategy.
+							</p><p>
+								During the second and third recruitment phases, data were gathered using one of two methods: minimal data collection or expanded data collection. Minimal visits consisted solely of questionnaire administration. Expanded visits consisted of questionnaire administration and one or more of the following: physical measures, biospecimens, and environmental samples. In June 2014, NCS received approval to use expanded data collection for all remaining Study visits (Post-Recruitment Follow-Up) and continued to follow up with all participants eligible for a visit until the study closed in December 2014. Detailed participant information was collected in the first phase and between June and December 2014, but abbreviated versions of questionnaires were used during the second and third phase.
+							</p><p>
+								The applications created for exploration of the Vanguard study data are described below.
+							</p>
 
-<!--
-<script src="http://d3js.org/d3.v3.min.js"></script>
-<script src="http://d3js.org/topojson.v1.min.js"></script>
-<script src="http://labratrevenge.com/d3-tip/javascripts/d3.tip.v0.6.3.js"></script>
--->
 
-</body>
+              	<hr>
+
+              	<h2 id="apps">Applications</h2>
+              	<div class="row">
+              		<div class="col-md-4"><a href="summary.html"><img src="images/icon_summary.png" style="height: 200px" class="img-responsive"></a></div>
+                  	<div class="col-md-8">
+											<p>
+												<h3>Summary</h3>
+												Images are responsive sed @mdo but sum are more fun peratis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium,
+				                totam rem aperiam
+											</p>
+										</div>
+              	</div>
+								<br/>
+								<div class="row">
+              		<div class="col-md-4"><a href="comparisons.html"><img src="images/icon_comparisons.png" style="height: 200px" class="img-responsive"></a></div>
+									<div class="col-md-8">
+										<p>
+											<h3>Comparisons</h3>
+											Images are responsive sed @mdo but sum are more fun peratis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium,
+											totam rem aperiam
+										</p>
+									</div>
+              	</div>
+								<br/>
+								<div class="row">
+              		<div class="col-md-4"><a href="#"><img src="//placehold.it/200x200" class="img-responsive"></a></div>
+									<div class="col-md-8">
+										<p>
+											<h3>Over Time</h3>
+											Images are responsive sed @mdo but sum are more fun peratis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium,
+											totam rem aperiam
+										</p>
+									</div>
+              	</div>
+
+              	<hr>
+
+              	<h2 id="help">Help</h2>
+      			Images are responsive sed @mdo but sum are more fun peratis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium,
+                totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae
+                dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia cor magni dolores
+                eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit,
+                sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem.
+                Ut enim ad minima veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut..
+              	<br>
+                Fos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit,
+                sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem.
+                Ut enim ad minima veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut..
+
+
+              	<h2 id="contact">Contact</h2>
+      			Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium,
+                totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae
+                dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia cor magni dolores
+                eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit,
+                sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem.
+                Ut enim ad minima veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut
+
+
+      		</div>
+  	</div>
+</div>
+
+
+
+	<!-- script references -->
+		<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.2/jquery.min.js"></script>
+		<script src="js/bootstrap.min.js"></script>
+		<script src="js/scripts.js"></script>
+	</body>
 </html>
